@@ -1,0 +1,77 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(45deg, #ff69b4, #8a2be2, #ff1493, #9400d3, #ff00ff);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.record-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 250px;
+    height: 250px;
+}
+
+.record {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: transform 0.5s ease;
+    position: absolute;
+    z-index: 1;
+}
+
+/* 🔥 Яркая рамка без зазоров */
+.record-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;  /* Рамка идеально по размеру родителя */
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 30%, rgba(255, 255, 255, 0) 70%);
+    box-shadow: 0 0 40px 15px white;
+    animation: pulse 2s infinite alternate;
+    z-index: -1; /* Размещаем под пластинкой */
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 30px 10px white; }
+    100% { box-shadow: 0 0 50px 20px white; }
+}
+
+.spin {
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 📱 Оптимизация для мобильных */
+@media (max-width: 768px) {
+    .record-container {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .record-container {
+        width: 140px;
+        height: 140px;
+    }
+}
