@@ -28,22 +28,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     record.addEventListener("click", function () {
-        setupAudio();
-
         if (!isPlaying) {
+            setupAudio();
             audioContext.resume().then(() => {
                 audioElement.play();
                 record.classList.add("spin"); // Начинаем вращение фото
                 isPlaying = true;
             });
-        } else {
-            // Плавное затухание звука перед остановкой
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 2);
-            setTimeout(() => {
-                audioElement.pause();
-                record.classList.remove("spin"); // Останавливаем вращение
-                isPlaying = false;
-            }, 2000);
         }
     });
 });
