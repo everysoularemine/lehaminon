@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let audioContext;
     let audioElement;
     let track;
+    let gainNode;
     let isPlaying = false;
 
     function setupAudio() {
@@ -13,7 +14,16 @@ document.addEventListener("DOMContentLoaded", function () {
             audioElement.loop = true;
 
             track = audioContext.createMediaElementSource(audioElement);
-            track.connect(audioContext.destination);
+            gainNode = audioContext.createGain();
+            gainNode.gain.value = 0; // Начинаем с нулевой громкости
+
+            track.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // Увеличиваем громкость плавно после старта
+            audioElement.addEventListener("canplaythrough", () => {
+                gainNode.gain.linearRampToValueAtTime(1.0, audioContext.currentTime + 2);
+            });
         }
     }
 
@@ -27,9 +37,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 isPlaying = true;
             });
         } else {
-            audioElement.pause();
-            record.classList.remove("spin"); // Останавливаем вращение
-            isPlaying = false;
+            // Плавное затухание звука перед остановкой
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 2);
+            setTimeout(() => {
+                audioElement.pause();
+                record.classList.remove("spin"); // Останавливаем вращение
+                isPlaying = false;
+            }, 2000);
         }
     });
 });
